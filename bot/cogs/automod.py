@@ -1,21 +1,68 @@
+<<<<<<< ours
+<<<<<<< ours
+<<<<<<< ours
 """Cog: AutoMod + Anti-raid."""
+=======
+"""Cog: Anti-raid + Anti-nuke."""
+>>>>>>> theirs
+=======
+"""Cog: Anti-raid + Anti-nuke."""
+>>>>>>> theirs
+=======
+"""Cog: Anti-raid + Anti-nuke."""
+>>>>>>> theirs
 
 from __future__ import annotations
 
 from collections import defaultdict, deque
 from datetime import datetime, timedelta
+<<<<<<< ours
+<<<<<<< ours
+<<<<<<< ours
 from typing import TYPE_CHECKING, Optional
 from urllib.parse import urlparse
+=======
+from typing import TYPE_CHECKING
+>>>>>>> theirs
+=======
+from typing import TYPE_CHECKING
+>>>>>>> theirs
+=======
+from typing import TYPE_CHECKING
+>>>>>>> theirs
 
 import discord
 from discord import app_commands
 from discord.ext import commands
 
+<<<<<<< ours
+<<<<<<< ours
+<<<<<<< ours
 from ..config import DEFAULTS_INT, URL_RE, Clr, utcnow
 from ..helpers import (
     apply_auto_timeout, can_bot_moderate, ensure_admin,
     fetch_audit_executor, is_admin, is_owner, record_case,
     send_alert, set_voice_ban,
+=======
+=======
+>>>>>>> theirs
+=======
+>>>>>>> theirs
+from ..config import utcnow
+from ..helpers import (
+    apply_auto_timeout,
+    ensure_admin,
+    fetch_audit_executor,
+    is_admin,
+    is_owner,
+    send_alert,
+<<<<<<< ours
+<<<<<<< ours
+>>>>>>> theirs
+=======
+>>>>>>> theirs
+=======
+>>>>>>> theirs
 )
 
 if TYPE_CHECKING:
@@ -23,14 +70,38 @@ if TYPE_CHECKING:
 
 
 class AutoModCog(commands.Cog):
+<<<<<<< ours
+<<<<<<< ours
+<<<<<<< ours
+=======
+    """Historical name kept for extension compatibility."""
+
+>>>>>>> theirs
+=======
+    """Historical name kept for extension compatibility."""
+
+>>>>>>> theirs
+=======
+    """Historical name kept for extension compatibility."""
+
+>>>>>>> theirs
     def __init__(self, bot: VoiceSitterBot) -> None:
         self.bot = bot
         self.join_windows: dict[int, deque[datetime]] = defaultdict(deque)
         self.channel_windows: dict[int, deque[datetime]] = defaultdict(deque)
         self.role_windows: dict[int, deque[datetime]] = defaultdict(deque)
+<<<<<<< ours
+<<<<<<< ours
+<<<<<<< ours
         self.msg_windows: dict[tuple[int, int], deque[datetime]] = defaultdict(deque)
 
     # ── Внешние методы (вызываются из Bot.on_message) ────────────────
+=======
+>>>>>>> theirs
+=======
+>>>>>>> theirs
+=======
+>>>>>>> theirs
 
     async def check_mass_mentions(self, message: discord.Message) -> bool:
         if message.guild is None or not isinstance(message.author, discord.Member):
@@ -52,16 +123,45 @@ class AutoModCog(commands.Cog):
             pass
 
         await apply_auto_timeout(
+<<<<<<< ours
+<<<<<<< ours
+<<<<<<< ours
             self.bot, message.guild, message.author, 20,
             "Anti-raid: mass mention", "anti_raid_mass_mention",
             {"mentions": count},
         )
         await send_alert(
             self.bot, message.guild,
+=======
+=======
+>>>>>>> theirs
+=======
+>>>>>>> theirs
+            self.bot,
+            message.guild,
+            message.author,
+            20,
+            "Anti-raid: mass mention",
+            "anti_raid_mass_mention",
+            {"mentions": count},
+        )
+        await send_alert(
+            self.bot,
+            message.guild,
+<<<<<<< ours
+<<<<<<< ours
+>>>>>>> theirs
+=======
+>>>>>>> theirs
+=======
+>>>>>>> theirs
             f"Mass mention: <@{message.author.id}> ({count} упоминаний). Timeout.",
         )
         return True
 
+<<<<<<< ours
+<<<<<<< ours
+<<<<<<< ours
     async def check_automod(self, message: discord.Message) -> None:
         if message.guild is None or not isinstance(message.author, discord.Member):
             return
@@ -192,6 +292,12 @@ class AutoModCog(commands.Cog):
 
     # ── Anti-raid события ────────────────────────────────────────────
 
+=======
+>>>>>>> theirs
+=======
+>>>>>>> theirs
+=======
+>>>>>>> theirs
     @commands.Cog.listener()
     async def on_member_join(self, member: discord.Member) -> None:
         if member.bot:
@@ -207,12 +313,38 @@ class AutoModCog(commands.Cog):
         if len(w) <= limit:
             return
         await apply_auto_timeout(
+<<<<<<< ours
+<<<<<<< ours
+<<<<<<< ours
             self.bot, guild, member, 30,
             "Anti-raid: join spike", "anti_raid_join",
             {"joins": len(w), "limit": limit},
         )
         await send_alert(
             self.bot, guild,
+=======
+=======
+>>>>>>> theirs
+=======
+>>>>>>> theirs
+            self.bot,
+            guild,
+            member,
+            30,
+            "Anti-raid: join spike",
+            "anti_raid_join",
+            {"joins": len(w), "limit": limit},
+        )
+        await send_alert(
+            self.bot,
+            guild,
+<<<<<<< ours
+<<<<<<< ours
+>>>>>>> theirs
+=======
+>>>>>>> theirs
+=======
+>>>>>>> theirs
             f"Join spike: {len(w)}/мин (лимит {limit}). <@{member.id}> timeout.",
         )
 
@@ -232,8 +364,29 @@ class AutoModCog(commands.Cog):
         offender = await fetch_audit_executor(guild, discord.AuditLogAction.channel_create, channel.id)
         if offender:
             await apply_auto_timeout(
+<<<<<<< ours
+<<<<<<< ours
+<<<<<<< ours
                 self.bot, guild, offender, 30,
                 "Anti-nuke: channel spike", "anti_nuke_channel_create",
+=======
+=======
+>>>>>>> theirs
+=======
+>>>>>>> theirs
+                self.bot,
+                guild,
+                offender,
+                30,
+                "Anti-nuke: channel spike",
+                "anti_nuke_channel_create",
+<<<<<<< ours
+<<<<<<< ours
+>>>>>>> theirs
+=======
+>>>>>>> theirs
+=======
+>>>>>>> theirs
                 {"count": len(w), "limit": limit},
             )
         try:
@@ -262,8 +415,29 @@ class AutoModCog(commands.Cog):
         offender = await fetch_audit_executor(guild, discord.AuditLogAction.role_create, role.id)
         if offender:
             await apply_auto_timeout(
+<<<<<<< ours
+<<<<<<< ours
+<<<<<<< ours
                 self.bot, guild, offender, 30,
                 "Anti-nuke: role spike", "anti_nuke_role_create",
+=======
+=======
+>>>>>>> theirs
+=======
+>>>>>>> theirs
+                self.bot,
+                guild,
+                offender,
+                30,
+                "Anti-nuke: role spike",
+                "anti_nuke_role_create",
+<<<<<<< ours
+<<<<<<< ours
+>>>>>>> theirs
+=======
+>>>>>>> theirs
+=======
+>>>>>>> theirs
                 {"count": len(w), "limit": limit},
             )
         try:
@@ -276,6 +450,9 @@ class AutoModCog(commands.Cog):
             text += f" Offender: <@{oid}>"
         await send_alert(self.bot, guild, text)
 
+<<<<<<< ours
+<<<<<<< ours
+<<<<<<< ours
     # ── Настройки AutoMod / Anti-raid (slash-команды) ────────────────
 
     @app_commands.command(name="set_raid_limits", description="Лимиты anti-raid")
@@ -285,6 +462,28 @@ class AutoModCog(commands.Cog):
     )
     async def set_raid_limits(
         self, interaction: discord.Interaction,
+=======
+=======
+>>>>>>> theirs
+=======
+>>>>>>> theirs
+    @app_commands.command(name="set_raid_limits", description="Лимиты anti-raid")
+    @app_commands.describe(
+        join_per_minute="Лимит входов/мин",
+        channel_create="Каналов/мин",
+        role_create="Ролей/мин",
+        mention_limit="Упоминаний в сообщении",
+    )
+    async def set_raid_limits(
+        self,
+        interaction: discord.Interaction,
+<<<<<<< ours
+<<<<<<< ours
+>>>>>>> theirs
+=======
+>>>>>>> theirs
+=======
+>>>>>>> theirs
         join_per_minute: app_commands.Range[int, 3, 50],
         channel_create: app_commands.Range[int, 1, 30],
         role_create: app_commands.Range[int, 1, 20],
@@ -300,6 +499,9 @@ class AutoModCog(commands.Cog):
         s.put(gid, "raid_mention_limit", str(mention_limit))
         await interaction.response.send_message("✅ Лимиты обновлены.", ephemeral=True)
 
+<<<<<<< ours
+<<<<<<< ours
+<<<<<<< ours
     @app_commands.command(name="set_automod_words", description="Запрещённые слова (через запятую)")
     async def set_automod_words(self, interaction: discord.Interaction, words: str) -> None:
         if not await ensure_admin(interaction):
@@ -356,6 +558,12 @@ class AutoModCog(commands.Cog):
         s.put_id_set(interaction.guild_id, "automod_exempt_role_ids", vals)
         await interaction.response.send_message("✅ Обновлено.", ephemeral=True)
 
+=======
+>>>>>>> theirs
+=======
+>>>>>>> theirs
+=======
+>>>>>>> theirs
 
 async def setup(bot: VoiceSitterBot) -> None:
     await bot.add_cog(AutoModCog(bot))

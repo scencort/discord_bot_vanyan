@@ -54,7 +54,6 @@ class VoiceSitterBot(commands.Bot):
         cog_modules = [
             "bot.cogs.setup",
             "bot.cogs.moderation",
-            "bot.cogs.automod",
             "bot.cogs.rooms",
             "bot.cogs.tickets",
             "bot.cogs.economy",
@@ -75,10 +74,6 @@ class VoiceSitterBot(commands.Bot):
 
     async def on_ready(self) -> None:
         log.info("Бот запущен как %s (id=%s)", self.user, self.user.id if self.user else "?")
-        if not PRIVILEGED_INTENTS:
-            log.warning(
-                "Ограниченный режим (USE_PRIVILEGED_INTENTS=0): anti-raid join + контент automod ограничены.",
-            )
 
         await self.sync_commands()
         try:
@@ -97,12 +92,7 @@ class VoiceSitterBot(commands.Bot):
         if await handle_mod_flow(message):
             return
 
-        # AutoMod
-        automod = self.get_cog("AutoModCog")
-        if automod is not None:
-            if await automod.check_mass_mentions(message):  # type: ignore[attr-defined]
-                return
-            await automod.check_automod(message)  # type: ignore[attr-defined]
+        # Automatic moderation is disabled by design.
 
     # ── on_voice_state_update — voice-sitter + temp rooms ────────────
 

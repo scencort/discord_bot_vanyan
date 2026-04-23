@@ -46,7 +46,7 @@ class ModerationCog(commands.Cog):
         self.bot.store.put(interaction.guild_id, "modlog_channel_id", str(channel.id))
         await interaction.response.send_message(f"✅ Mod-log: {channel.mention}", ephemeral=True)
 
-    @app_commands.command(name="set_alert_channel", description="Канал алертов anti-raid/automod")
+    @app_commands.command(name="set_alert_channel", description="Канал системных алертов")
     async def set_alert_channel(self, interaction: discord.Interaction,
                                 channel: discord.TextChannel) -> None:
         if not await ensure_admin(interaction):
